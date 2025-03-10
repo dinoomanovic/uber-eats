@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
-import LeftArrowImage from '../components/LeftArrowImage';
 import RightArrowImage from '../components/RightArrowImage';
 import AllSetImage from '../components/AllSetImage';
 
@@ -23,6 +21,8 @@ export default function EmailVerificationScreen() {
     if (!fontsLoaded) return null;
 
     return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+
         <View style={styles.rootContainer}>
 
 <AllSetImage style={styles.allSetImage} width={72} height={72} />
@@ -45,6 +45,7 @@ export default function EmailVerificationScreen() {
                 </TouchableOpacity>
             </View>
         </View>
+        </SafeAreaView>
     );
 }
 

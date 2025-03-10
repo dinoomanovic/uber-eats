@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, useWindowDimensions, StatusBar } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, useWindowDimensions, StatusBar, SafeAreaView, Dimensions } from 'react-native';
 import { router } from 'expo-router';
 import LeftArrowImage from '../components/LeftArrowImage';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import SearchIconImage from '../components/SearchIconImage';
 import { useFonts } from 'expo-font';
 import PromotionsTabImage from '../components/PromotionsTabImage';
 import RewardsTabImage from '../components/RewardsTabImage';
@@ -12,10 +10,16 @@ import PickupImageIcon from '../components/PickupImageIcon';
 import DownArrowImage from '../components/DownArrowImage';
 import FloatingHeartButton from '../components/HeartImageIcon';
 import ComeBackLaterCard from '../components/ComeBackLaterCard';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, { useAnimatedScrollHandler, useSharedValue, useAnimatedStyle, interpolate } from 'react-native-reanimated';
+
+const { width } = Dimensions.get('window');
 
 const DealsScreen = () => {
     const layout = useWindowDimensions();
     const [index, setIndex] = useState(0);
+    const scrollX = useSharedValue(0);
+    const scrollViewRef = useRef(null);
 
     let [fontsLoaded] = useFonts({
         'UberMoveTextRegular': require('../../assets/fonts/UberMoveTextRegular.otf'),
@@ -31,60 +35,78 @@ const DealsScreen = () => {
         { key: 'rewards', title: 'Rewards' },
     ];
 
-    const renderScene = SceneMap({
-        offers: () => <OffersTab />,
-        rewards: () => <RewardsTab />,
+    const onTabPress = (index) => {
+        setIndex(index);
+        scrollViewRef.current.scrollTo({ x: index * width, animated: true });
+    };
+
+    const scrollHandler = useAnimatedScrollHandler({
+        onScroll: (event) => {
+            scrollX.value = event.contentOffset.x;
+        },
     });
 
-    const renderTabBar = (props) => (
-        <View>
-            <View style={styles.tabBar}>
-                {routes.map((route, i) => (
-                    <TouchableOpacity
-                        key={route.key}
-                        style={[styles.tabItem, { width: layout.width / 2 }]}
-                        onPress={() => setIndex(i)}
-                    >
-                        <View style={styles.tabItemContent}>
-                            <View style={styles.tabItemRow}>
-                                {route.key === 'offers' ? (
-                                    <PromotionsTabImage width={24} height={24} style={styles.tabIcon} />
-                                ) : (
-                                    <RewardsTabImage width={24} height={24} style={styles.tabIcon} />
-                                )}
-                                <Text style={[
-                                    styles.tabText,
-                                    index === i && styles.tabTextActive,
-                                    route.key === 'offers' ? styles.offersTabText : styles.rewardsTabText, // Conditional styles
-                                ]}>
-                                    {route.title}
-                                </Text>
-                            </View>
-                            {index === i && <View style={styles.tabIndicator} />}
-                        </View>
-                    </TouchableOpacity>
-                ))}
-            </View>
-            <View style={styles.divider} />
-        </View>
-    );
+    const indicatorStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ translateX: interpolate(scrollX.value, [0, width], [0, width / 2]) }], 
+        };
+    });
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
                     <LeftArrowImage width={20} height={18} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Deals</Text>
             </View>
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                renderTabBar={renderTabBar}
-                initialLayout={{ width: layout.width }}
-            />
-        </View>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <View style={[styles.tabBar, {marginBottom: 0}]}>
+                    {routes.map((route, i) => (
+                        <TouchableOpacity
+                            key={route.key}
+                            style={[styles.tabItem, { width: layout.width / 2 }]}
+                            onPress={() => onTabPress(i)}
+                        >
+                            <View style={styles.tabItemContent}>
+                                <View style={styles.tabItemRow}>
+                                    {route.key === 'offers' ? (
+                                        <PromotionsTabImage width={24} height={24} style={styles.tabIcon} />
+                                    ) : (
+                                        <RewardsTabImage width={24} height={24} style={styles.tabIcon} />
+                                    )}
+                                    <Text style={[
+                                        styles.tabText,
+                                        index === i && styles.tabTextActive,
+                                        route.key === 'offers' ? styles.offersTabText : styles.rewardsTabText,
+                                    ]}>
+                                        {route.title}
+                                    </Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    ))}
+                    <Animated.View style={[styles.tabIndicator, indicatorStyle]} />
+                </View>
+                <View style={styles.divider} />
+                <Animated.ScrollView
+                    ref={scrollViewRef}
+                    horizontal
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    onScroll={scrollHandler}
+                    scrollEventThrottle={16}
+                    style={{ flex: 1 }}
+                >
+                    <View style={{ width }}>
+                        <OffersTab />
+                    </View>
+                    <View style={{ width }}>
+                        <RewardsTab />
+                    </View>
+                </Animated.ScrollView>
+            </GestureHandlerRootView>
+        </SafeAreaView>
     );
 };
 
@@ -181,8 +203,8 @@ const OffersTab = () => {
             </ScrollView>
             {offersCards.map((card, index) => (
                 <View key={index} style={index === offersCards.length - 1 ? { marginBottom: 59 } : null}>
-                    <Card {...card} />
-                </View>
+                <Card {...card} />
+            </View>
             ))}
             <View style={styles.dividerContainer} />
             <ComeBackLaterCard />
@@ -272,14 +294,13 @@ const styles = StyleSheet.create({
     headerTitle: { fontSize: 20, lineHeight: 28, letterSpacing: 0, fontWeight: 400, fontFamily: 'UberMoveTextRegular', },
     divider: { height: 5, backgroundColor: '#E8E8E8' },
     dividerContainer: { height: 10.34, backgroundColor: '#E8E8E8' },
-
-    tabBar: { flexDirection: 'row', backgroundColor: 'white' },
+    tabBar: { flexDirection: 'row', position: 'relative' },
     tabItem: { alignItems: 'center', justifyContent: 'center' },
     tabItemContent: { alignItems: 'center', justifyContent: 'center', paddingVertical: 12 },
     tabItemRow: { flexDirection: 'row', alignItems: 'center' },
-    tabIcon: { marginRight: 4 },
- tabText: {
-        color: '#6B6B6B',
+    tabIcon: { marginRight: 8 },
+    tabText: {
+        color: '#000000',
         fontWeight: '400',
         fontFamily: 'UberMoveTextRegular',
         fontSize: 18,
@@ -294,12 +315,12 @@ const styles = StyleSheet.create({
     },
     tabTextActive: { color: 'black' },
     tabIndicator: {
-        backgroundColor: 'black',
-        height: 5,
-        width: '100%',
-        marginTop: 2,
         position: 'absolute',
         bottom: 0,
+        left: 0,
+        height: 5,
+        backgroundColor: 'black',
+        width: Dimensions.get('window').width / 2,
     },
     rewardsTitle: {
         fontSize: 22, 

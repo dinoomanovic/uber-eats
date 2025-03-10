@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
 import LeftArrowImage from '../components/LeftArrowImage';
@@ -73,6 +73,11 @@ export default function EmailVerificationScreen() {
     if (!fontsLoaded) return null;
 
     return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                    <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={'padding'}
+              >
         <View style={styles.rootContainer}>
             <Text style={styles.title}>Enter the 4-digit code sent to you at: johndoe@email.com</Text>
             <View style={styles.container}>
@@ -113,6 +118,8 @@ export default function EmailVerificationScreen() {
                 </TouchableOpacity>
             </View>
         </View>
+        </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
 import ToggleVisibilityImage from '../components/ToggleVisibilityImage';
@@ -45,6 +45,11 @@ export default function PasswordInputScreen() {
     if (!fontsLoaded) return null;
 
     return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                        <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={'padding'}
+                  >
         <View style={styles.rootContainer}>
             <Text style={styles.title}>Welcome back, John</Text>
             <View style={styles.container}>
@@ -85,6 +90,8 @@ export default function PasswordInputScreen() {
                 </TouchableOpacity>
             </View>
         </View>
+        </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 

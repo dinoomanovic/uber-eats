@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity, StatusBar, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CustomTextInput from '../components/CustomTextInput';
 import SearchScreen from '../search/SearchScreen';
@@ -55,20 +55,20 @@ export default function BrowseScreen() {
     };
 
     return (
-        <View style={{ flex: 1 }}>
-            {showSearchScreen ? (
-                <SearchScreen onBack={handleBackFromSearch} />
-            ) : (
-                <ScrollView
-                    style={styles.container}
-                    contentContainerStyle={styles.scrollViewContent} // Add contentContainerStyle
-                >
-                    <View style={styles.searchBarContainer}>
-                        <Ionicons name="search" size={24} color="black" style={styles.searchIcon} />
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <View style={{ flex: 1 }}>
+                {showSearchScreen ? (
+                    <SearchScreen onBack={handleBackFromSearch} />
+                ) : (
+                    <ScrollView
+                        style={styles.container}
+                        contentContainerStyle={styles.scrollViewContent}
+                    >
                         <TouchableOpacity
-                            style={{ flex: 1 }}
+                            style={styles.searchBarContainer} // TouchableOpacity now replaces searchBarContainer
                             onPress={handleSearchPress}
                         >
+                            <Ionicons name="search" size={24} color="black" style={styles.searchIcon} />
                             <CustomTextInput
                                 style={styles.searchBar}
                                 placeholder="Food, shopping, drinks, etc"
@@ -77,22 +77,22 @@ export default function BrowseScreen() {
                                 editable={false}
                             />
                         </TouchableOpacity>
-                    </View>
-                    <Text style={styles.titleTopCategories}>Top Categories</Text>
-                    <View style={styles.categoriesGrid}>
-                        {categories.map((category) => (
-                            <CategoryItem key={category.id} name={category.name} image={category.image} />
-                        ))}
-                    </View>
-                    <Text style={styles.titleAllCategories}>All Categories</Text>
-                    <View style={styles.allCategoriesGrid}>
-                        {allCategories.map((category) => (
-                            <CategoryItem key={category.id} name={category.name} image={category.image} />
-                        ))}
-                    </View>
-                </ScrollView>
-            )}
-        </View>
+                        <Text style={styles.titleTopCategories}>Top Categories</Text>
+                        <View style={styles.categoriesGrid}>
+                            {categories.map((category) => (
+                                <CategoryItem key={category.id} name={category.name} image={category.image} />
+                            ))}
+                        </View>
+                        <Text style={styles.titleAllCategories}>All Categories</Text>
+                        <View style={styles.allCategoriesGrid}>
+                            {allCategories.map((category) => (
+                                <CategoryItem key={category.id} name={category.name} image={category.image} />
+                            ))}
+                        </View>
+                    </ScrollView>
+                )}
+            </View>
+        </SafeAreaView>
     );
 }
 
@@ -139,12 +139,12 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: StatusBar.currentHeight
     },
-    searchBarContainer: {
+    searchBarContainer: { // searchBarContainer is now applied to TouchableOpacity
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#EEEEEE',
         borderRadius: 20,
-        marginTop:6,
+        marginTop: 6,
         marginBottom: 11,
     },
     searchIcon: {
@@ -190,6 +190,6 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     scrollViewContent: {
-        paddingBottom: 49, // Add bottom padding
+        paddingBottom: 49, 
     },
 });

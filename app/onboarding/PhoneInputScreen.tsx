@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
 import UkFlagImage from '../components/UkFlagImage';
@@ -29,6 +29,11 @@ export default function PhoneInputScreen() {
   if (!fontsLoaded) return null; 
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <KeyboardAvoidingView
+                          style={{ flex: 1 }}
+                          behavior={'padding'}
+                        >
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Enter your mobile number</Text>
       <View style={styles.container}>
@@ -83,6 +88,8 @@ export default function PhoneInputScreen() {
 
       </View>
     </View>
+    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 

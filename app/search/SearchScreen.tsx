@@ -40,9 +40,9 @@ const SearchScreen: React.FC<SearchScreenProps> = ({ onBack }) => {
                             <Text style={[styles.tabText, index === i && styles.tabTextActive]}>
                                 {route.title}
                             </Text>
-                            <View style={[styles.indicatorContainer, { bottom: 2 }]} />
+                            <View style={styles.indicatorContainer} />
 
-                            {index === i && <View style={[styles.tabIndicator, { bottom: 2 }]} />}
+                            {index === i && <View style={styles.tabIndicator} />}
                         </View>
                     </TouchableOpacity>
                 ))}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     },
     tabBarContainer: {
         backgroundColor: 'white',
-        height: 45,
+        height: 40, // Increased height
     },
     category: {
         marginTop: 16,
@@ -174,13 +174,14 @@ const styles = StyleSheet.create({
     scrollViewContent: {
         paddingBottom: 105,
     },
-    tabBar: { flexDirection: 'row', backgroundColor: 'white' },
+    tabBar: { flexDirection: 'row', backgroundColor: 'white'},
     tabItem: { alignItems: 'center', justifyContent: 'center' },
     tabItemContent: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 8, 
+        paddingBottom: 16, 
         flexWrap: 'wrap',
+        marginBottom: 0,
     },
     tabText: {
         color: '#000000',
@@ -196,14 +197,14 @@ const styles = StyleSheet.create({
         height: 5,
         width: '100%',
         position: 'absolute',
-        bottom: 2,
+        bottom: 0, // Adjusted bottom
     },
     indicatorContainer: {
         backgroundColor: '#e8e8e8',
         height: 5,
         width: '100%',
         position: 'absolute',
-        bottom: 2,
+        bottom: 0, // Adjusted bottom
     },
     tabScroll: {
         backgroundColor: '#E8E8E8',

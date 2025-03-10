@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import { useFonts } from 'expo-font';
 import OrdersIconImage from '../components/OrdersIconImage';
 import FavouritesIconImage from '../components/FavouritesIconImage';
@@ -36,6 +36,7 @@ const AccountScreen = () => {
     if (!fontsLoaded) return null;
 
     return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <Image source={require('../../assets/images/user.png')} style={styles.userImage} />
@@ -56,6 +57,7 @@ const AccountScreen = () => {
             ))}
             <Text style={styles.aboutTitle}>About</Text>
         </ScrollView>
+        </SafeAreaView>
     );
 };
 

@@ -6,7 +6,10 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
-  StatusBar
+  StatusBar,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -36,6 +39,11 @@ export default function LandingScreen() {
   if (!fontsLoaded) return null;
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={'padding'}
+      >
     <ScrollView
       style={{ flex: 1, backgroundColor: '#FFFFFF' }} 
       keyboardShouldPersistTaps="handled"
@@ -67,6 +75,8 @@ export default function LandingScreen() {
         </View>
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
