@@ -95,3 +95,5 @@ This project contains an example of the Uber Eats clone application, built with 
   * Offers have some extra features like scrollable pills view and badge header text.
   * Both screens have sample floating heart icon in top right corner.
   * Back button leads to Search results screen.
+
+![App Screenshot](https://i.imgur.com/x7HTyXI.png)
