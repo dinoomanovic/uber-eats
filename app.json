@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "uber-eats",
+    "slug": "uber-eats",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/ubereatslogo.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/ubereatslogo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.odin.ubereats"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/ubereatslogo.png"
+    },
+"plugins": [
+  "expo-router",
+  [
+    "expo-splash-screen",
+    {
+      "image": "./assets/images/ubereatslogo.png",
+      "imageWidth": 200,
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    }
+  ],
+  [
+    "expo-font",
+    {
+      "fonts": [
+        "./assets/fonts/UberMoveTextRegular.otf",
+        "./assets/fonts/UberMoveTextMedium.otf",
+        "./assets/fonts/UberMoveTextLight.otf",
+        "./assets/fonts/UberMoveTextBold.otf"
+      ]
+    }
+  ]
+],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
